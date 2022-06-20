@@ -1,0 +1,24 @@
+import(expm)
+import(msir)
+import(mixtools)
+import(mclust)
+import(phateR)
+import(RColorBrewer)
+import(beeswarm)
+import(dplyr)
+import(BayesPrism)
+
+
+export(new.sf)
+export(denoise.cartography)
+export(plot.cartography)
+export(set.background.level, compute.background.level)
+export(run.phate)
+export(plot.beeswarm)
+export(merge.cell.type)
+export(compute.Znk, norm.by.sf)
+export(add.meta, add.feature)
+
+
+exportClasses(SpaceFold)
+

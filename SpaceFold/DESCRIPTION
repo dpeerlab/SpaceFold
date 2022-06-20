@@ -1,0 +1,14 @@
+Package: SpaceFold
+Version: 2.0
+Date: 2022-06-20
+Title: SpaceFold: Mapping gene expression cartography from spatial transcriptomics for tissues with stereotypical structures 
+Author: Tinyi Chu <tc532@cornell.edu>
+Maintainer: Tinyi Chu <tc532@cornell.edu>
+Depends: R (>= 2.6), BayesPrism
+Imports: stats, utils, expm, msir, mixtools, mclust, phateR, RColorBrewer, beeswarm, dplyr
+Description: Bayesian cell type and gene expression deconvolution for bulk RNA-seq and spatial transcriptomics using scRNA-seq as reference
+License: GPL-2 | GPL-3
+biocViews: Sequencing, Analysis
+LazyLoad: yes
+RoxygenNote: 6.0.1
+VignetteBuilder: knitr
