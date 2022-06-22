@@ -24,6 +24,7 @@ run.phate <- function(sf.obj,
 					 center=TRUE,
 					 scale=TRUE,
 					 if.pseudo.axis=TRUE,
+					 if.uniform=FALSE,
 					 if.invert=FALSE,
 					 mds.solver="smacof",
 					 n.jobs=20,
@@ -34,7 +35,7 @@ run.phate <- function(sf.obj,
 	
 	theta <- sf.obj@data@theta
 	
-	if(anchorCellTypes=="all") anchorCellTypes <- colnames(theta) 
+	if(length(anchorCellTypes)==1 & anchorCellTypes=="all") anchorCellTypes <- colnames(theta) 
 	
 	#subset using relevant cell types
 	theta <- theta[, anchorCellTypes]
@@ -64,12 +65,16 @@ run.phate <- function(sf.obj,
 					})
 	}
 	
+	if(if.uniform)
+		cord <- rank(cord) / length(cord)
+	
 	#store spacefold parameters
 	sf.obj@control_param <- list(anchorCellTypes= anchorCellTypes,
 									renorm.to.one= renorm.to.one,
 									center= center,
 									scale= scale,
 									if.pseudo.axis= if.pseudo.axis,
+									if.uniform= if.uniform,
 									ndim=1,
 					 				mds.solver= mds.solver,
 					 				n.jobs= n.jobs,
@@ -89,7 +94,6 @@ run.phate <- function(sf.obj,
 #' @param palette a function that generates the palette 
 #' @param q.cut upper quantile of spots to plot, default is 0.95 
 #'			(=spots containing the top 5% of each cell type) 
-#'		if set to "auto", use the $res$background.level
 #' @param pdf.prefix the prefix of pdf filename.
 #' @param cell.type.order a character vector speficying the order of plotting. 
 #'			Default is NULL, which uses the colnames of theta matrix
@@ -174,8 +178,6 @@ plot.beeswarm <- function(sf.obj,
 	dev.off()
 
 }
-
-#plot.beeswarm (WTLI.bp.merged.top)
 
 
 

@@ -2,7 +2,7 @@
 
 get.dist.to.knn <- function(dist.mat, ka){
 	apply(dist.mat, 1, function(dist.i){
-		dist.i[rank(dist.i)==ka]
+		dist.i[rank(dist.i,ties.method="first")==ka]
 	})
 }
 

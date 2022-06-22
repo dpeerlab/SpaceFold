@@ -29,11 +29,9 @@ We provide a computational gateway to run BayesPrism on a HPC server, and visual
 2 Cite SpaceFold:
 -----------
 
-Cell type and gene expression deconvolution with BayesPrism enables Bayesian integrative analysis across bulk and single-cell RNA sequencing in oncology
+Lymphatics act as a signaling hub to regulate intestinal stem cell activity
 
-A lymphatic-stem cell interactome regulates intestinal stem cell activity
-
-https://www.biorxiv.org/content/10.1101/2022.01.29.478341v1
+https://doi.org/10.1016/j.stem.2022.05.007
 
 3 Workflow of SpaceFold
 --------
@@ -64,7 +62,7 @@ See the vignette.R for details.
 	
 6 FAQ 
 ----------------------------------------------------------------------
-1) What if the assumption made by SpaceFold?
+1) What are the assumptions made by SpaceFold?
 
 SpaceFold assumes that 1) the tissue has an underlying 1D structure; 2) it is a  stereotypical structure that is repeatedly sampled by ST; 3) the cell type fraction of a spatial spot is sufficient in inferring its physical cordinate along the 1D axis.
 
