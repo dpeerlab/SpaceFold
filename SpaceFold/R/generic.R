@@ -40,7 +40,7 @@ setMethod("show", "SpaceFold",
 		cat("\n")
 		
 		if(!is.na(object@SpaceFold.axis[1,1]))
-			cat("SpaceFold.axis computed.")
+			cat("SpaceFold.axis computed. \n")
 		 
 		if(length(object@denoised.cartography@Z.denoised)){
 			cat("Cartography denoised. \n")
