@@ -15,7 +15,7 @@ run.phate (sf.obj,
 					 if.pseudo.axis=TRUE,
 					 if.invert=FALSE,
 					 mds.solver="smacof",
-					 n.jobs=20,
+					 n.jobs=1,
 					 knn=10,
 					 ...)
 }
@@ -27,7 +27,7 @@ run.phate (sf.obj,
   \item{scale}{A logical variable to denote if to scale the seleceted cell type fractions across spatial spots to sd=1. Default TRUE.}
   \item{if.pseudo.axis}{A logical variable to denote if to return a scaled cordinate with min=zero and max=one.}
   \item{if.invert}{ A logical variable to denote whehter to flip the spacefold cordinate. Default=FALSE}   \item{mds.solver}{MDS solver used by PHATE. Default="smacof". See ?phate for more details.} 
-  \item{n.jobs}{ Number of threads used by PHATE. Default=20. } 
+  \item{n.jobs}{ Number of threads used by PHATE. Default=1. } 
   \item{knn}{ The knn paramter used by PHATE. Default=10. See ?phate for more details. } 
   \item{...}{ additional paramters passed to phate.} 
 }

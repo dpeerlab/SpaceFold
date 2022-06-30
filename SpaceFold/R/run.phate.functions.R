@@ -27,7 +27,7 @@ run.phate <- function(sf.obj,
 					 if.uniform=FALSE,
 					 if.invert=FALSE,
 					 mds.solver="smacof",
-					 n.jobs=20,
+					 n.jobs=1,
 					 knn=10,
 					 ...){
 	

@@ -22,3 +22,8 @@ export(add.meta, add.feature)
 
 exportClasses(SpaceFold)
 
+exportMethods(show)
+exportMethods('$')
+exportMethods('[')
+
+

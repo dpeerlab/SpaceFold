@@ -218,64 +218,29 @@ norm.by.sf <- function(sfd.obj){
 
 
 
-#' subset BayesPrism object by row (mixture sample id)
-#' @param bp.obj a BayesPrism output object
-#' @param sub.idx a logical vector of the same length as mixture samples
-# subset.row <- function(bp.obj, sub.idx){
-	# stopifnot(nrow(bp.obj$para$X)==length(sub.idx))
-	
-	# bp.obj$para$X <- bp.obj$para$X[sub.idx,]
-	# if(!is.null(bp.obj$para$meta)) bp.obj$para$meta <- bp.obj$para$meta[sub.idx,]
-
-	# bp.obj$res$first.gibbs.res$gibbs.theta <- bp.obj$res$first.gibbs.res$gibbs.theta[sub.idx,]
-	# bp.obj$res$first.gibbs.res$theta.merged <- bp.obj$res$first.gibbs.res$theta.merged[sub.idx,]	
-	# bp.obj$res$first.gibbs.res$Znkg <- bp.obj$res$first.gibbs.res$Znkg[sub.idx,,]
-	# bp.obj$res$first.gibbs.res$Znkg.merged <- bp.obj$res$first.gibbs.res$Znkg.merged[sub.idx,,]
-	# bp.obj$res$final.gibbs.theta <- bp.obj$res$final.gibbs.theta[sub.idx,]
-	
-	# if(!is.null(bp.obj$res$first.gibbs.res$Znk)) {
-		# bp.obj$res$first.gibbs.res$Znk <- bp.obj$res$first.gibbs.res$Znk[sub.idx,]
-		# bp.obj$res$first.gibbs.res$Znk.merged <- bp.obj$res$first.gibbs.res$Znk.merged[sub.idx,]
-	# }
-	
-	# if(!is.null(bp.obj$res$first.gibbs.res$Znkg.merged.normed)){
-		# bp.obj$res$first.gibbs.res$Znkg.merged.normed <- bp.obj$res$first.gibbs.res$Znkg.merged.normed[sub.idx,,]
-	# }
-	
-	# if(!is.null(bp.obj$res$res.regroup)){
-		# bp.obj$res$res.regroup$theta0 <- bp.obj$res$res.regroup$theta0[sub.idx,]
-		# bp.obj$res$res.regroup$Znkg <- bp.obj$res$res.regroup$Znkg[sub.idx,,]
-		# bp.obj$res$res.regroup$Znk <- bp.obj$res$res.regroup$Znk[sub.idx,]
-		# bp.obj$res$res.regroup$thetaF <- bp.obj$res$res.regroup$thetaF[sub.idx,]
-		# bp.obj$res$res.regroup$Znkg.normed <- bp.obj$res$res.regroup$Znkg.normed[sub.idx,,]
-	# }
-	
-	# #background level is not subsetted
-	
-	# bp.obj
-# }
 
 
 
 
-# # #' subset BayesPrism object based on region
-# #' @param bp.obj a BayesPrism output object
-# #' @param col.name the column name of the meta dataframe
-# #' @param val the value on the right hand side comparison operator
-# #' @param operator the character denoting the comaprison, e.g. "==", ">", "<". default is "==".
-# subset.bp <- function(bp.obj, 
-					  # col.name, 
-					  # val,
-					  # operator="=="){
+
+# #' subset BayesPrism object based on region
+#' @param sf.obj a SpaceFold output object
+#' @param col.name the column name of the meta dataframe
+#' @param val the value on the right hand side comparison operator
+#' @param operator the character denoting the comaprison, e.g. "==", ">", "<". default is "==".
+subset.sf <- function(sf.obj, 
+					  col.name, 
+					  val,
+					  operator="=="){
 	
-	# if(is.character(val)) val <- paste("\'", val, "\'",sep="")
+	if(is.character(val)) val <- paste("\'", val, "\'",sep="")
 	
-	# exp.text <- paste( "bp.obj$para$meta$", col.name, " ", operator, " ",  val,sep="")
-	# sub.idx <- eval ( parse(text = exp.text)  )
+	exp.text <- paste( "sf.obj@meta$", col.name, " ", operator, " ",  val,sep="")
+	sub.idx <- eval ( parse(text = exp.text)  )
 	
-	# subset.row(bp.obj, sub.idx)
+	subset.data(sf.obj, sub.idx)
 	
-# }
+}
 
 
 # # 

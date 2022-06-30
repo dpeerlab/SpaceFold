@@ -15,6 +15,9 @@ setClass("SpaceFoldData",
          )
 )
 
+#validator to be implemented
+
+
 setClass("denoisedCartography",
          slots = c(
            Z.denoised = "list",
