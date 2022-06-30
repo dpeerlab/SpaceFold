@@ -45,6 +45,10 @@ https://doi.org/10.1016/j.stem.2022.05.007
 	
 	BayesPrism, expm, msir, mixtools, mclust, phateR, RColorBrewer, beeswarm, dplyr
 
+* Recommended:
+    pdfjam: https://github.com/rrthomas/pdfjam
+    Each panel will conatin the expression cartography of one gene in one cell type along the SpaceFold axis. If pdfjam is installed, output will be a pdf file with all panels concatenated as a 2D matrix. Otherwise, output will be a pdf file with one panel on each page. 
+    
 * If all dependent packages and commands have been installed, please use the following codes to install/update the package in R terminal. 
 
 ```````
