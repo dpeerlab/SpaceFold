@@ -19,7 +19,7 @@ setMethod("show", "SpaceFoldData",
 		Znk.summary <- apply(object@Znk, 2, summary)	
 		print(round(Znk.summary,3))
 		
-		if(!is.na(object@selected.spot.matrix)){
+		if(!is.na(object@selected.spot.matrix[1,1])){
 			cat("Number of spots above background for each cell type: \n")
 			print(apply(object@selected.spot.matrix,2,sum))
 		}
@@ -39,7 +39,7 @@ setMethod("show", "SpaceFold",
 		show(object@data)
 		cat("\n")
 		
-		if(!is.na(object@SpaceFold.axis))
+		if(!is.na(object@SpaceFold.axis[1,1]))
 			cat("SpaceFold.axis computed.")
 		 
 		if(length(object@denoised.cartography@Z.denoised)){
