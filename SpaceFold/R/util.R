@@ -109,10 +109,7 @@ merge.cell.type <- function(sf.obj,
 	
 	#summing over Znkg
 	sum.Zngk <- function(Zngk, grouping.list){
-		
-		#remove regrouped names also in the original name
-		grouping.list <- grouping.list[! names(grouping.list) %in% dimnames(Zngk)[[3]]]
-		
+				
 		uniq.ct <- dimnames(Zngk)[[3]] [!dimnames(Zngk)[[3]] %in% names(grouping.list)]
 		
 		Zngk.all <- array(NA,
