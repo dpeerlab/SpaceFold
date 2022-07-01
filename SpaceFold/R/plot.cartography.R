@@ -362,7 +362,7 @@ plot.cartography.nopdfjam <- function(sf.obj,
 						  color= my.palette[ct.idx],
 						  xlab="SpaceFold cordinate",
 						  ylab=paste(raw.or.norm, "expression value"),
-						  axis.pos= axis.pos)
+						  axis.pos= "right")
 		}
 	}
 	
