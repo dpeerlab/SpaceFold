@@ -89,8 +89,6 @@ merge.cell.type <- function(sf.obj,
 	
 	#summing over theta (or Znk)
 	sum.theta <- function(theta, grouping.list){
-		#remove regrouped names also in the original name
-		grouping.list <- grouping.list[! names(grouping.list) %in% colnames(theta)]
 		
 		theta.sum <- matrix(NA,
 							nrow=nrow(theta),
@@ -102,6 +100,9 @@ merge.cell.type <- function(sf.obj,
 			if(length(cell.types.i)==1) theta.sum[,i] <- theta[, cell.types.i]
 			else theta.sum[,i] <- rowSums(theta[, cell.types.i])
 		}
+		
+		#replace the previous group definition
+		theta <- theta[,!colnames(theta) %in% colnames(theta.sum)]
 				
 		cbind(theta, theta.sum)
 	}
@@ -112,32 +113,36 @@ merge.cell.type <- function(sf.obj,
 		#remove regrouped names also in the original name
 		grouping.list <- grouping.list[! names(grouping.list) %in% dimnames(Zngk)[[3]]]
 		
+		uniq.ct <- dimnames(Zngk)[[3]] [!dimnames(Zngk)[[3]] %in% names(grouping.list)]
+		
 		Zngk.all <- array(NA,
-						  dim=c(dim(Zngk)[1], dim(Zngk)[2], dim(Zngk)[3]+length(grouping.list)),
+						  dim=c(dim(Zngk)[1], 
+						  		dim(Zngk)[2], 
+						  		dim(length(uniq.ct)+length(grouping.list))),
 						  dimnames = list(dimnames(Zngk)[[1]],
 						   				  dimnames(Zngk)[[2]], 
-	 			                          c(dimnames(Zngk)[[3]],names(grouping.list))))
+	 			                          c(uniq.ct,names(grouping.list))))
 	 	
-	 	Zngk.all[,,1:dim(Zngk)[3]] <- Zngk
+	 	Zngk.all[,,1:length(uniq.ct)] <- Zngk[,, uniq.ct]
 	 			                   
 		for(i in 1:length(grouping.list)){
 			cell.types.i <- grouping.list[[i]]
 			Zngk.i <- Zngk[,,cell.types.i]
-			if(length(dim(Zngk.i))==2) Zngk.all[,,dim(Zngk)[3]+i] <- Zngk.i
-			else Zngk.all[,,dim(Zngk)[3]+i] <- rowSums(Zngk.i[,,cell.types.i, drop=F], dims=2)			
+			if(length(dim(Zngk.i))==2) Zngk.all[,,length(uniq.ct)+i] <- Zngk.i
+			else Zngk.all[,,length(uniq.ct)+i] <- rowSums(Zngk.i[,,cell.types.i, drop=F], dims=2)			
 		}
 		Zngk.all
 	}
 	
 	merge.seletion.matrix <- function(selected.spot.matrix, grouping.list){
 		
-		#remove regrouped names also in the original name
-		grouping.list <- grouping.list[! names(grouping.list) %in% colnames(selected.spot.matrix)]
-		
 		selected.spot.matrix.merged <- do.call(cbind, 
 												  lapply(grouping.list, 
 												  		function(i) apply(selected.spot.matrix[,i,drop=F],1,sum)>0))
 		colnames(selected.spot.matrix.merged) <- names(grouping.list)
+		
+		#replace the previous group definition
+		selected.spot.matrix <- selected.spot.matrix[,!colnames(selected.spot.matrix) %in% colnames(selected.spot.matrix.merged)]
 		
 		cbind(selected.spot.matrix , selected.spot.matrix.merged)
 	}
