@@ -153,8 +153,8 @@ plot.beeswarm <- function(sf.obj,
 
 	if(!is.null(cell.type.order)) plot.df $cell.type <- factor(plot.df $cell.type,levels= cell.type.order)
 
-	dev.new(height= height, width= width, file=paste(pdf.prefix,"_spacefold_beeswarm.pdf",sep=""))
-
+	#dev.new(height= height, width= width, file=paste(pdf.prefix,"_spacefold_beeswarm.pdf",sep=""))
+	pdf(height= height, width= width, file=paste(pdf.prefix,"_spacefold_beeswarm.pdf",sep=""))
 	par(mar= mar, xpd=TRUE)
 
 	beeswarm(cord ~ cell.type, data = plot.df[plot.df $if.above.background,],
