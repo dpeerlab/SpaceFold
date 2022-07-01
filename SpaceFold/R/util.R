@@ -118,7 +118,7 @@ merge.cell.type <- function(sf.obj,
 		Zngk.all <- array(NA,
 						  dim=c(dim(Zngk)[1], 
 						  		dim(Zngk)[2], 
-						  		dim(length(uniq.ct)+length(grouping.list))),
+						  		length(uniq.ct)+length(grouping.list)),
 						  dimnames = list(dimnames(Zngk)[[1]],
 						   				  dimnames(Zngk)[[2]], 
 	 			                          c(uniq.ct,names(grouping.list))))
