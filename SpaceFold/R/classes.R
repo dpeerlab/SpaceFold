@@ -49,7 +49,8 @@ setClass("SpaceFold",
            feature = data.frame(),
            meta = data.frame(),
            control_param = list(theta.cutoffs = NA_real_,
-           					 	Znk.cutoffs = NA_real_)
+           					 	Znk.cutoffs = NA_real_,
+           					 	posterior.cutoff = NA_real_)
          )
 )
 

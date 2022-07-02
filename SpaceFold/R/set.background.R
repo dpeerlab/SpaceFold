@@ -50,6 +50,7 @@ set.background.level <-  function(sf.obj,
 #' @param sf.obj a BayesPrism output object
 #' @param which.theta use first(initial) or final(updated) theta 
 compute.background.level <-  function(sf.obj,
+									  posterior.cutoff=0.7,
 									  theta.cutoffs.user=NULL,
 									  Znk.cutoffs.user=NULL){
 		
@@ -61,43 +62,138 @@ compute.background.level <-  function(sf.obj,
 	Znk <- sf.obj@data@Znk
 	
 	theta.cutoffs <-c()
-	print("fitting mixture models on theta...")
+	cat("fitting mixture models on theta... \n")
+	cat("Current cell type: ")
 	for(i in 1:ncol(theta)){
-		print(colnames(theta)[i])
+		cat(colnames(theta)[i], " ")
 
-		fit=gammamixEM(theta[,i], k=2,maxit=10000,maxrestarts=100)
+		capture.output({fit=gammamixEM(theta[,i], k=2,maxit=10000,maxrestarts=100)})
 		cls <- apply(fit$posterior,1,which.max)
 		if(length(unique(cls))==1) {
-			print("refit")
-			fit=gammamixEM(theta[,i], k=2,maxit=10000,maxrestarts=100, mom.start=F)
-			cls <- apply(fit$posterior,1,which.max)
+			#print("refit")
+			capture.output({ffit=gammamixEM(theta[,i], k=2,maxit=10000,maxrestarts=100, mom.start=F)})
 		}
-		print(table(cls))
-		theta.cutoffs <- c(theta.cutoffs, median(c(range(theta[cls==1,i]),range(theta[cls==2,i]))))
+		posterior <- fit$posterior
+		
+		#detemin which cluster has higher mean
+		cls.mean <- fit$gamma.pars["alpha",] * fit$gamma.pars["beta",]
+		
+		if(cls.mean[1] > cls.mean[2]) max.cls <- 1
+		else max.cls <- 2
+		
+		high.cls.idx <- posterior[,max.cls] > posterior.cutoff
+		
+		#loop until there are non-zero spots with high posterior in the cluster with higher mean
+		while(length(high.cls.idx)==0){
+			posterior.cutoff <- posterior.cutoff - 0.05
+			high.cls.idx <- posterior[,max.cls] > posterior.cutoff
+		}
+		
+		theta.cutoff.i <- min(theta[high.cls.idx,i])
+		
+		theta.cutoffs <- c(theta.cutoffs, theta.cutoff.i)
 	}
 	names(theta.cutoffs) <- colnames(theta)
 
-	if(!is.null(theta.cutoffs.user)) theta.cutoffs[theta.cutoffs<theta.cutoffs.user] <- theta.cutoffs.user
+	cat("\n")
+
+	if(!is.null(theta.cutoffs.user)){
+		if(length(theta.cutoffs.user)==1) {
+			theta.cutoffs.user <- rep(theta.cutoffs.user, length(theta.cutoffs))
+			names(theta.cutoffs.user) <- names(theta.cutoffs)
+		}
+		
+		stopifnot(!is.null(names(theta.cutoffs.user)))
+		
+		auto.cutoff.selected <- theta.cutoffs[names(theta.cutoffs.user)]
+		
+		user.higher.idx <- names(auto.cutoff.selected)[auto.cutoff.selected < theta.cutoffs.user]
+		
+		if(length(user.higher.idx)>0)
+			theta.cutoffs[user.higher.idx] <- theta.cutoffs.user[user.higher.idx]
+	} 
+
 
 	Znk.cutoffs <-c()
-	print("fitting mixture models on Znk...")
+	cat("fitting mixture models on Znk... \n")
+	cat("Current cell type: ")
 	for(i in 1:ncol(Znk)){
-		print(colnames(Znk)[i])
-	
-		fit= Mclust(Znk[,i], G=2)
-		cls <- fit$classification
-		print(table(cls))
-		Znk.cutoffs <- c(Znk.cutoffs, median(c(range(Znk[cls==1,i]),range(Znk[cls==2,i]))))
+		cat(colnames(Znk)[i], " ")
+		
+		capture.output({fit <- Mclust(Znk[,i], G=2)})
+		posterior <- fit$z
+		
+		#detemin which cluster has higher mean
+		cls.mean <- fit$parameters$mean
+		
+		if(cls.mean[1] > cls.mean[2]) max.cls <- 1
+		else max.cls <- 2
+		
+		high.cls.idx <- posterior[,max.cls] > posterior.cutoff
+		
+		#loop until there are non-zero spots with high posterior in the cluster with higher mean
+		while(length(high.cls.idx)==0){
+			posterior.cutoff <- posterior.cutoff - 0.05
+			high.cls.idx <- posterior[,max.cls] > posterior.cutoff
+		}
+		
+		Znk.cutoff.i <- min(Znk[high.cls.idx,i])
+		
+		Znk.cutoffs <- c(Znk.cutoffs, Znk.cutoff.i)
 	}
 	names(Znk.cutoffs) <- colnames(Znk)
+	cat("\n")	
+	
+	if(!is.null(Znk.cutoffs.user)){
+		if(length(Znk.cutoffs.user)==1) {
+			Znk.cutoffs.user <- rep(Znk.cutoffs.user, length(Znk.cutoffs))
+			names(Znk.cutoffs.user) <- names(Znk.cutoffs)
+		}
+		
+		stopifnot(!is.null(names(Znk.cutoffs.user)))
+		
+		auto.cutoff.selected <- Znk.cutoffs[names(Znk.cutoffs.user)]
+		
+		user.higher.idx <- names(auto.cutoff.selected)[auto.cutoff.selected < Znk.cutoffs.user]
+		
+		if(length(user.higher.idx)>0)
+			Znk.cutoffs[user.higher.idx] <- Znk.cutoffs.user[user.higher.idx]
+	} 
 
-	if(!is.null(Znk.cutoffs)) Znk.cutoffs[Znk.cutoffs<Znk.cutoffs.user] <- Znk.cutoffs.user
+	sf.obj@control_param$posterior.cutoff <- posterior.cutoff
 
 	set.background.level (sf.obj = sf.obj, 
 						  theta.cutoffs = theta.cutoffs,
 						  Znk.cutoffs = Znk.cutoffs)	
 
 }
+
+
+#selected.idx a logical vector
+
+select.spot <- function(sf.obj,
+						cell.type,
+						selected.idx,
+						op){
+
+	old.selection <- sf.obj@data@selected.spot.matrix[, cell.type] 
+	
+	if(op=="and") 
+		new.selection <- old.selection & selected.idx
+	
+	if(op=="or") 
+		new.selection <- old.selection | selected.idx
+	
+	if(op=="new") 
+		new.selection <- selected.idx
+	
+	sf.obj@data@selected.spot.matrix[, cell.type]  <- new.selection
+	
+	return(sf.obj)						
+}
+
+
+
 
 
 

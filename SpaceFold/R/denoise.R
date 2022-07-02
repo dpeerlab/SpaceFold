@@ -21,21 +21,30 @@ denoise.cartography <- function(sf.obj, ka=5, tansition=1000){
 		
 		selected.spot <- sf.obj@data@selected.spot.matrix[, ct.i]
 		
-		distance.matrix.i <- distance.matrix[selected.spot, selected.spot]
 		
-		Z.i <- sf.obj@data@Z[selected.spot,,ct.i]
-		Z.normed.i <- sf.obj@data@Z.normed[selected.spot,,ct.i]
+		if(sum(selected.spot) < ka*2){
+			#do not perform denoise if too few spots are above background
+			cat("cell type ", ct.i, ," with less than ", ka*2, " spots above background will not be denoised.\n")
+			Z.denoise.i <- Z.i
+			Z.normed.denoise.i <- Z.normed.i
+		}
+		else{
+			distance.matrix.i <- distance.matrix[selected.spot, selected.spot]
 		
-		sigma <- get.dist.to.knn(dist.mat= distance.matrix.i, ka= ka)
+			Z.i <- sf.obj@data@Z[selected.spot,,ct.i]
+			Z.normed.i <- sf.obj@data@Z.normed[selected.spot,,ct.i]
 		
-		A.mat <- (distance.matrix.i/sigma)^2
-		A.mat <- (exp(-(A.mat)) + exp(-t(A.mat)))/2
+			sigma <- get.dist.to.knn(dist.mat= distance.matrix.i, ka= ka)
 		
-		A.mat <- A.mat/rowSums(A.mat)
-		A.mat <- A.mat %^% tansition
+			A.mat <- (distance.matrix.i/sigma)^2
+			A.mat <- (exp(-(A.mat)) + exp(-t(A.mat)))/2
 		
-		Z.denoise.i <- A.mat %*% Z.i
-		Z.normed.denoise.i <- A.mat %*% Z.normed.i
+			A.mat <- A.mat/rowSums(A.mat)
+			A.mat <- A.mat %^% tansition
+		
+			Z.denoise.i <- A.mat %*% Z.i
+			Z.normed.denoise.i <- A.mat %*% Z.normed.i
+		}
 		
 		list(Z.denoise = Z.denoise.i, Z.normed.denoise = Z.normed.denoise.i)
 		
