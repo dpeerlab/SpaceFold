@@ -178,6 +178,8 @@ select.spot <- function(sf.obj,
 
 	old.selection <- sf.obj@data@selected.spot.matrix[, cell.type] 
 	
+	stopifnot(length(selected.idx)==length(old.selection))
+	
 	if(op=="and") 
 		new.selection <- old.selection & selected.idx
 	
