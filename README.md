@@ -45,9 +45,19 @@ https://doi.org/10.1016/j.stem.2022.05.007
 	
 	BayesPrism, expm, msir, mixtools, mclust, phateR, RColorBrewer, beeswarm, dplyr
 
+* BayesPrism can be installed by:
+
+```````
+library("devtools");
+install_github("Danko-Lab/BayesPrism/BayesPrism")
+```````
+
 * Recommended:
     pdfjam: https://github.com/rrthomas/pdfjam
+    
     Each panel will conatin the expression cartography of one gene in one cell type along the SpaceFold axis. If pdfjam is installed, output will be a pdf file with all panels concatenated as a 2D matrix. Otherwise, output will be a pdf file with one panel on each page. 
+    
+* User needs to make sure that the python end of PHATE is installed properly: https://github.com/KrishnaswamyLab/phateR . Also check the python version with PHATE installed is linked by reticulate properly (use use_python and use_condaenv to configure). Otherwise run.phate will report error.
     
 * If all dependent packages and commands have been installed, please use the following codes to install/update the package in R terminal. 
 
@@ -75,7 +85,9 @@ SpaceFold assumes that 1) the tissue has an underlying 1D structure; 2) it is a 
 ----------
 
 * R vignette:
-vignette.R
+* vignettes.html
+
+To view, please git clone the repository and open the html files using your browser.
 
 
 * R manual:
