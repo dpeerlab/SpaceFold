@@ -7,20 +7,28 @@ get.dist.to.knn <- function(dist.mat, ka){
 }
 
 
-denoise.cartography <- function(sf.obj, ka=5, tansition=1000){
+denoise.cartography <- function(sf.obj, 
+								ka=5, 
+								tansition=1000, 
+								force.recompute=FALSE){
 	
 	cord <- sf.obj@SpaceFold.axis[,1]
 	stopifnot(!is.null(cord))
 	
 	
+	#extract exsiting cell types in denoised cartography
+	
+	cell.type.old <- names(sf.obj@denoised.cartography@Z.denoised)
+	
 	distance.matrix <- as.matrix(dist(cord))
 	
 	all.cell.types <- colnames(sf.obj@data@theta)
 	
+	if(!force.recompute) all.cell.types <- all.cell.types[! all.cell.types %in% cell.type.old]
+	
 	denoise.dat.list <- lapply(all.cell.types, function(ct.i){
 		
 		selected.spot <- sf.obj@data@selected.spot.matrix[, ct.i]
-		
 		
 		if(sum(selected.spot) < ka*2){
 			#do not perform denoise if too few spots are above background
@@ -52,10 +60,22 @@ denoise.cartography <- function(sf.obj, ka=5, tansition=1000){
 	
 	names(denoise.dat.list) <- all.cell.types
 	
-	sf.obj@denoised.cartography <- new("denoisedCartography", 
+	
+	if(!force.recompute){
+		sf.obj@denoised.cartography <- new("denoisedCartography", 
+										Z.denoised=c(sf.obj@denoised.cartography@Z.denoised,
+													 lapply(denoise.dat.list, "[[", "Z.denoise")),
+										Z.normed.denoised=c(sf.obj@denoised.cartography@Z.normed.denoised,
+															lapply(denoise.dat.list, "[[", "Z.normed.denoise")),
+										control_param = list(ka=c(sf.obj@denoised.cartography@control_param$ka,ka), 
+															 tansition=c(sf.obj@denoised.cartography@control_param$tansition, tansition)))
+	}
+	else{
+		sf.obj@denoised.cartography <- new("denoisedCartography", 
 										Z.denoised=lapply(denoise.dat.list, "[[", "Z.denoise"),
 										Z.normed.denoised =lapply(denoise.dat.list, "[[", "Z.normed.denoise"),
 										control_param = list(ka=ka, tansition=tansition))
+	}
 	
 	sf.obj	
 }
