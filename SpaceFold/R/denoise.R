@@ -32,9 +32,9 @@ denoise.cartography <- function(sf.obj,
 		
 		if(sum(selected.spot) < ka*2){
 			#do not perform denoise if too few spots are above background
-			cat("cell type ", ct.i, ," with less than ", ka*2, " spots above background will not be denoised.\n")
-			Z.denoise.i <- Z.i
-			Z.normed.denoise.i <- Z.normed.i
+			cat("cell type ", ct.i, " has less than ", ka*2, " spots above background. It will not be denoised.\n")
+			Z.denoise.i <- sf.obj@data@Z[selected.spot,,ct.i]
+			Z.normed.denoise.i <- sf.obj@data@Z.normed[selected.spot,,ct.i]
 		}
 		else{
 			distance.matrix.i <- distance.matrix[selected.spot, selected.spot]

@@ -13,7 +13,7 @@ new.sf (bp.obj,
 }
 \arguments{
   \item{bp.obj}{A S4 object of the class "BayesPrism"}
-  \item{feature}{A dataframe to annotate genes. Recommend to have ENSEMBL IDs and gene symbols as columns.}
+  \item{feature}{A dataframe to annotate genes. rownames to be matched the gene names used by BayesPrism, i.e., colnames(bp.obj$prism$mixture). It usually contains the following columns: ENSEMBL ID, gene symbol, etc... depending on the type of input genes used for plotting later. Recommend to have ENSEMBL IDs and gene symbols as columns.}
   \item{meta}{A dataframe to annotate spatial spot (optional). Required if wants to subset the SpaceFold object.}
 }
 \details{
