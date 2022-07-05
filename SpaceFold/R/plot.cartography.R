@@ -192,14 +192,14 @@ plot.cartography.pdfjam <- function(sf.obj,
 	if(denoise) plot.dat <- get.plot.dat.denoised  (sf.obj, raw.or.norm, selected.genes, selected.cell.types, span)
 	else plot.dat <- get.plot.dat  (sf.obj, raw.or.norm, selected.genes, selected.cell.types, bin.by, n.bins, span)
 	
+	selected.cell.types <- selected.cell.types[selected.cell.types  %in% names(plot.dat[[1]])]
+	
 	color.num <- length(selected.cell.types)
 	if(color.num<=8) my.palette <- brewer.pal(color.num,"Dark2")
 	if(color.num>8 && color.num<=12) my.palette <- brewer.pal(color.num,"Paired")
 	if(color.num > 12)  my.palette <-  colorRampPalette(brewer.pal(12, "Paired"))(color.num)
 	
-
 	ylim.all <- lapply(selected.genes, FUN= get.ylim, dat.list= plot.dat, show.raw= show.raw)
-	
 	
 	pdf.idx <- 1
 	
@@ -311,6 +311,8 @@ plot.cartography.nopdfjam <- function(sf.obj,
 	if(denoise) plot.dat <- get.plot.dat.denoised  (sf.obj, raw.or.norm, selected.genes, selected.cell.types, span)
 	else plot.dat <- get.plot.dat  (sf.obj, raw.or.norm, selected.genes, selected.cell.types, bin.by, n.bins, span)
 	
+	selected.cell.types <- selected.cell.types[selected.cell.types  %in% names(plot.dat[[1]])]
+
 	color.num <- length(selected.cell.types)
 	if(color.num<=8) my.palette <- brewer.pal(color.num,"Dark2")
 	if(color.num>8 && color.num<=12) my.palette <- brewer.pal(color.num,"Paired")

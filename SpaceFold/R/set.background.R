@@ -52,7 +52,10 @@ set.background.level <-  function(sf.obj,
 compute.background.level <-  function(sf.obj,
 									  posterior.cutoff=0.7,
 									  theta.cutoffs.user=NULL,
-									  Znk.cutoffs.user=NULL){
+									  Znk.cutoffs.user=NULL,
+									  seed=NULL){
+	
+	if(is.null(seed)) set.seed(seed)
 		
 	Znk <- sf.obj@data@Znk
 	theta <- sf.obj@data@theta
@@ -67,12 +70,8 @@ compute.background.level <-  function(sf.obj,
 	for(i in 1:ncol(theta)){
 		cat(colnames(theta)[i], " ")
 
-		capture.output({fit=gammamixEM(theta[,i], k=2,maxit=10000,maxrestarts=100)})
+		capture.output({fit=gammamixEM(theta[,i], k=2,maxit=10000,maxrestarts=100, mom.start=F)})		
 		cls <- apply(fit$posterior,1,which.max)
-		if(length(unique(cls))==1) {
-			#print("refit")
-			capture.output({ffit=gammamixEM(theta[,i], k=2,maxit=10000,maxrestarts=100, mom.start=F)})
-		}
 		posterior <- fit$posterior
 		
 		#detemin which cluster has higher mean

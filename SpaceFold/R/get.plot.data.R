@@ -32,6 +32,12 @@ get.plot.dat.denoised <- function(sf.obj,
 			
 			cord.ordered <- cord.vec[order(cord.vec)]
 			exp.ordered <- exp.vec.denoised[order(cord.vec)]
+			
+			if(length(cord.ordered)==0) {
+				ct.list[[k]]<-NULL
+				next
+			}
+			
 			loess.fit <- loess.sd(y= exp.ordered, x= cord.ordered, nsigma = 2, span=span)
 			
 			ct.list[[k]] <- list(exp.vec = exp.vec.raw, 
@@ -45,6 +51,7 @@ get.plot.dat.denoised <- function(sf.obj,
 			
 		}
 		names(ct.list) <- selected.cell.types
+		ct.list[sapply(ct.list, is.null)] <- NULL
 		dat.list[[g]] <- ct.list
 	} 
 	names(dat.list) <- selected.genes
@@ -77,6 +84,11 @@ get.plot.dat <- function(sf.obj,
 			exp.vec <- exp.dat[spot.idx,  gene.idx[g], selected.cell.types[k]]
 			cord.vec <- sf.obj@SpaceFold.axis[spot.idx,1]
 			
+			if(length(cord.vec)==0) {
+				ct.list[[k]]<-NULL
+				next
+			}
+			
 			ct.list[[k]] <- fit.exp.curv (exp.vec= exp.vec, 
 						 								 cord.vec= cord.vec, 
 						 								 n.bins= n.bins,
@@ -84,7 +96,9 @@ get.plot.dat <- function(sf.obj,
 						 								 span = span)
 			
 		}
+		
 		names(ct.list) <- selected.cell.types
+		ct.list[sapply(ct.list, is.null)] <- NULL
 		dat.list[[g]] <- ct.list
 	} 
 	names(dat.list) <- selected.genes
