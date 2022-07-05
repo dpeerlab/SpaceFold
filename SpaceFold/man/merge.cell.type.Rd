@@ -19,6 +19,6 @@ merge.cell.type(sf.obj,
 
 }
 \value{
-returns an S4 object of the class "SpaceFold". The cell type dimension of theta, Z, Z.normed, Znk and selected.spot.matrix will expand corrspondingly. 
+returns an S4 object of the class "SpaceFold". The cell type dimension of theta, Z, Z.normed, Znk and selected.spot.matrix will expand corrspondingly. merge.cell.type will automatically add a cell type "total" to indicate the undeconvolved total expression. 
 }
 

@@ -25,7 +25,7 @@ plot.cartography (sf.obj,
   \item{sf.obj}{A SpaceFold object}
   \item{raw.or.norm}{A character variable to denote whether plot raw expression (deconvovled reads) or   expression normalized by total expression of each cell type.}
   \item{selected.genes}{A character vector of gene symbols or ENSEMBL IDs. (automatically determines based on sf.obj@feature) }
-  \item{selected.cell.types}{A character vector of selected cell types or names of grouped cell types.}
+  \item{selected.cell.types}{A character vector of selected cell types or names of grouped cell types. Use the character "total" if needs to plot undeconvolved total expression.}
   \item{denoise}{A logical variable to denote whether to plot cartography denoised by markov diffusion (SpaceFold v2.0) or the sliding window average (SpaceFold v1.0, used by the paper). Default=TRUE.}
   \item{bin.by}{How to bin spots. Used when denoise=FALSE. "equal.size": each bin has the same number of spots. "equal.step": each bin has the same length on the SpaceFold axis. Default="equal.size".}
   \item{span}{The parameter which controls the degree of smoothing by loess. Default=0.75. If denoise=TRUE, we recommend to use 0.25.}

@@ -85,7 +85,8 @@ add.feature <- function(sf.obj, feature=NULL){
 #' @param grouping.list a named list containing the cell states / cell types to be summed, with name denoting the corresponding cell type 
 #' @param return.merge.only a logical variable denoting if only returns the regrouped results or the full bp.obj with a new entry "XXX.regrouped" added to the $res entry
 merge.cell.type <- function(sf.obj,
-					   grouping.list){
+					   		grouping.list,
+					   		get.total=TRUE){
 	
 	#summing over theta (or Znk)
 	sum.theta <- function(theta, grouping.list){
@@ -141,7 +142,9 @@ merge.cell.type <- function(sf.obj,
 		#replace the previous group definition
 		selected.spot.matrix <- selected.spot.matrix[,!colnames(selected.spot.matrix) %in% colnames(selected.spot.matrix.merged)]
 		
-		cbind(selected.spot.matrix , selected.spot.matrix.merged)
+		selected.spot.matrix <- cbind(selected.spot.matrix , selected.spot.matrix.merged)
+		selected.spot.matrix[,"total"] <- TRUE
+		selected.spot.matrix
 	}
 	
 	theta <- sf.obj@data@theta
@@ -150,6 +153,8 @@ merge.cell.type <- function(sf.obj,
 	selected.spot.matrix <- sf.obj@data@selected.spot.matrix	
 	
 	all.cell.types <- colnames(theta)
+	
+	if(get.total) grouping.list <- c(grouping.list, list(total = all.cell.types))
 	
 	stopifnot(!is.null(names(grouping.list)))
 	stopifnot(all(unlist(grouping.list) %in% all.cell.types))
@@ -169,7 +174,6 @@ merge.cell.type <- function(sf.obj,
 		
 	sf.obj
 }
-
 
 
 #' function to compute normalized expression per cell type per spot, Znkg, by the size factor of each cell type in each spot, Znk
