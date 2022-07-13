@@ -20,6 +20,7 @@ export(merge.cell.type)
 export(compute.Znk, norm.by.sf)
 export(add.meta, add.feature)
 
+export(subset.gene, combine.genes)
 
 exportClasses(SpaceFold)
 

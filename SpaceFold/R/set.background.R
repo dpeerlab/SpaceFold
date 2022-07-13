@@ -71,6 +71,16 @@ compute.background.level <-  function(sf.obj,
 		cat(colnames(theta)[i], " ")
 
 		capture.output({fit=gammamixEM(theta[,i], k=2,maxit=10000,maxrestarts=100, mom.start=F)})		
+		#capture.output({fit2=gammamixEM(theta[,i], k=2,maxit=10000,maxrestarts=100, mom.start=T)})
+		# cls.mean.fit1 <- fit1 $gamma.pars["alpha",] * fit1 $gamma.pars["beta",]
+		# cls.mean.diff.fit1 <- max(cls.mean.fit1)-min(cls.mean.fit1)
+		# cls.mean.fit2 <- fit2 $gamma.pars["alpha",] * fit2 $gamma.pars["beta",]
+		# cls.mean.diff.fit2 <- max(cls.mean.fit2)-min(cls.mean.fit2)
+		
+		# #search for the fit with better separation
+		# if(cls.mean.diff.fit1 > cls.mean.diff.fit2) fit <- fit1
+		# else fit <- fit2
+				
 		cls <- apply(fit$posterior,1,which.max)
 		posterior <- fit$posterior
 		
@@ -83,7 +93,7 @@ compute.background.level <-  function(sf.obj,
 		high.cls.idx <- posterior[,max.cls] > posterior.cutoff
 		
 		#loop until there are non-zero spots with high posterior in the cluster with higher mean
-		while(length(high.cls.idx)==0){
+		while(sum(high.cls.idx)==0){
 			posterior.cutoff <- posterior.cutoff - 0.05
 			high.cls.idx <- posterior[,max.cls] > posterior.cutoff
 		}
@@ -131,7 +141,7 @@ compute.background.level <-  function(sf.obj,
 		high.cls.idx <- posterior[,max.cls] > posterior.cutoff
 		
 		#loop until there are non-zero spots with high posterior in the cluster with higher mean
-		while(length(high.cls.idx)==0){
+		while(sum(high.cls.idx)==0){
 			posterior.cutoff <- posterior.cutoff - 0.05
 			high.cls.idx <- posterior[,max.cls] > posterior.cutoff
 		}

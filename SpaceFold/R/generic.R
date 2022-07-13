@@ -65,34 +65,6 @@ setMethod("$", "SpaceFold",
 
 
 
-#' subset SpaceFold object by spot. Slot denoised.cartography will not be subsutted. As denoising depends on the spot.
-#' @param sf.obj a SpaceFold output object
-#' @param sub.idx a logical/numeric vector 
-subset.data <- function(sf.obj, 
-					   sub.idx,
-					   drop){
-					   		
-	#subset data slot
-	data <- new("SpaceFoldData")
-	
-	if(length(dim(sf.obj@data@Z))>1) data@Z <- sf.obj@data@Z[sub.idx,,,drop= drop]	
-	if(sum(dim(sf.obj@data@theta))>2) data@theta <- sf.obj@data@theta[sub.idx,,drop= drop]
-	if(sum(dim(sf.obj@data@Znk))>2) data@Znk <- sf.obj@data@Znk[sub.idx,,drop= drop]
-	if(length(dim(sf.obj@data@Z.normed))>1) data@Z.normed <- sf.obj@data@Z.normed[sub.idx,,,drop= drop]
-	if(sum(dim(sf.obj@data@selected.spot.matrix))>2) data@selected.spot.matrix <- sf.obj@data@selected.spot.matrix[sub.idx,,drop= drop]
-	sf.obj@data <- data
-	
-	#subset SpaceFold.axis slot
-	if(!is.na(sf.obj@SpaceFold.axis)) 
-		sf.obj@SpaceFold.axis<- sf.obj@SpaceFold.axis[sub.idx,,drop= drop]
-	
-	if(nrow(sf.obj@meta)>0) 
-		sf.obj@meta<- sf.obj@meta[sub.idx,,drop= drop]
-		
-	sf.obj
-}
-
-
 #generic [ function for S4 object SpaceFold
 #' @exportMethod
 setMethod("[", c("SpaceFold", "integer", "missing", "ANY"),
@@ -100,7 +72,7 @@ setMethod("[", c("SpaceFold", "integer", "missing", "ANY"),
     ## make sense (to me), so in rebellion we'll quietly ignore it.
     function(x, i, j, ..., drop)
 {
-    subset.data(sf.obj=x, sub.idx=i, drop=drop)
+    subset.spot(sf.obj=x, sub.idx=i, drop=drop)
 })
 
 #generic [ function for S4 object SpaceFold
@@ -110,13 +82,8 @@ setMethod("[", c("SpaceFold", "logical", "missing", "ANY"),
     ## make sense (to me), so in rebellion we'll quietly ignore it.
     function(x, i, j, ..., drop)
 {
-    subset.data(sf.obj=x, sub.idx=i, drop=drop)
+    subset.spot(sf.obj=x, sub.idx=i, drop=drop)
 })
-
-
-
-
-
 
 
 
