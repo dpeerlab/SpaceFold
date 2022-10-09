@@ -26,7 +26,9 @@ Space Ranger output and the h5ad files of the scRNA-seq data can be downloaded f
 1 Cloud Computing Service:
 ---------------
 
-We provide a computational gateway to run BayesPrism on a HPC server, and visualize SpaceFold cartography for mouse small and large intestine tissues. (Available in early July)
+We provide a computational gateway to run SpaceFold on a HPC server, and visualize SpaceFold cartography for mouse small and large intestine tissues. 
+
+https://www.bayesprism.org/
 
 
 2 Cite SpaceFold:
