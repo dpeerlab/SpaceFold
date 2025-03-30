@@ -35,7 +35,7 @@ run.phate <- function(sf.obj,
 	
 	theta <- sf.obj@data@theta
 	
-	if(length(anchorCellTypes)==1 & anchorCellTypes=="all") anchorCellTypes <- colnames(theta) 
+	if(length(anchorCellTypes)==1 & anchorCellTypes[1]=="all") anchorCellTypes <- colnames(theta) 
 	
 	#subset using relevant cell types
 	theta <- theta[, anchorCellTypes]
